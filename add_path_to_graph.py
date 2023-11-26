@@ -27,6 +27,14 @@ def read_adjlist_with_tuples(file_path):
 
 def add_path(G, path, store_file_name):
 
+    for i in range(len(path[0])-1):
+            try:
+                G[path[0][i]][path[0][i+1]]
+            except:
+                print("Add")
+            G.add_edge(path[0][i], path[0][i+1])
+            
+
     for idx in [0, 1, 2]:
         print(idx)
 

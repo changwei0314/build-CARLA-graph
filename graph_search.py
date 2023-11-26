@@ -163,6 +163,8 @@ if __name__ == '__main__':
                 ###################### search path #########################
                 start = (white[0], white[1])
                 end = (goal_pos[1], goal_pos[0])
+
+                # print(start, end)
                 
                 new_end = find_closest_end_waypoint(end, all_whites_pos)
 
@@ -188,7 +190,7 @@ if __name__ == '__main__':
                 rdp_img, _ = rdp_algorithm(draw_img, path)
 
                 if count % 10 == 5:
-                    cv2.imwrite(f"./tmp_res/{count}_{start}_{new_end}.png", rdp_img)
+                    cv2.imwrite(f"./tmp_result/{town_name}/{count}_{start}_{new_end}.png", rdp_img)
 
 
         print(f"{count} / {len(all_whites_pos)}")

@@ -36,7 +36,27 @@ instance_map = cv2.imread(f"./instance_goal_maps/{town_name}.png")
 
 
 ################################## function #####################################################
-        
+
+def find_closest_end_waypoint(original_point, all_whites):
+    
+    min_idx = -1
+    idx = 0
+    cur_dis = 1000000
+    for white in all_whites:
+        delta_x = original_point[0] - white[0]
+        delta_y = original_point[1] - white[1]
+        dis = (delta_x**2 + delta_y**2)**0.5
+
+        if dis < cur_dis:
+            min_idx = idx
+            cur_dis = dis
+
+        idx += 1
+
+    closest_end_waypoint = all_whites[min_idx]
+
+    return closest_end_waypoint
+ 
 def pixel_to_carla(self, image):
     min_point = np.array([min_x, min_y])
     image = np.argwhere(image > 0)
@@ -111,6 +131,7 @@ for white in all_whites_pos:
             
             start = (white[0], white[1])
             end = (goal_pos[1], goal_pos[0])
+            end = find_closest_end_waypoint(end, all_whites_pos)
 
             transfer_end = None
             if end in transfer_goal_dict:
@@ -118,15 +139,16 @@ for white in all_whites_pos:
             else:
                 transfer_end = end
 
-            print("Start:", start)
-            print("end:", end)
+            # print("Start:", start)
+            # print("end:", end)
 
             ################################################################################################
             # Cannot find the path because there is no waypoint between two parallel lane
             if action == "Right Lane Change" or action == "Left Lane Change":
                 # print("lane change")
                 continue
-            if transfer_end in not_found_goal_list:
+
+            if [transfer_end, action] in not_found_goal_list:
                 not_found_list.append([start, end, action, bgr_string])
                 print(f"============= Fail: {len(not_found_list)} =============")
                 continue
@@ -137,32 +159,44 @@ for white in all_whites_pos:
                 
                 ##### Second attempt to find path #####
                 # Reverse search
-                print("============= Second Attempt =============")
+                print("============= Second Attempt (reverse try) =============")
                 final_path = new_find_path(transfer_end, start, all_whites_pos, action, False)
-                final_path = final_path[::-1]
 
                 if len(final_path) == 0:
                     ##### Third attempt to find path #####
                     # Global search
-                    print("============= Third Attempt =============")
+                    print("============= Third Attempt (original start-end try) =============")
                     global_search = True
-                    final_path = new_find_path(transfer_end, start, all_whites_pos, action, global_search)
-                    final_path = final_path[::-1]
-                    
-                    if len(final_path) == 0:
-                        not_found_list.append([start, end, action, bgr_string])
-                        not_found_goal_list.append(transfer_end)
+                    final_path = new_find_path(start, end, all_whites_pos, action, global_search)
 
-                        print(f"============= Fail: {len(not_found_list)} =============")
-                        continue
-                        # print("="*20)
-                        # print("Action", action)
-                        # print("start = ", start)
-                        # print("end = ", end)
-                        # print("transfer_end", transfer_end)
-                        # print("bgr_string:", bgr_string)
-                        # print("="*20)
-                        # exit()
+                    if len(final_path) == 0:
+                        ##### Fourth attempt to find path #####
+                        # Global Reverse search
+                        print("============= Fourth Attempt (original start-end reverse try) =============")
+                        global_search = True
+                        final_path = new_find_path(end, start, all_whites_pos, action, global_search)
+                        
+                        if len(final_path) == 0:
+                            not_found_list.append([start, end, action, bgr_string])
+                            not_found_goal_list.append([transfer_end, action])
+
+                            print(f"============= Fail: {len(not_found_list)} =============")
+                            continue
+                            # print("="*20)
+                            # print("Action", action)
+                            # print("start = ", start)
+                            # print("end = ", end)
+                            # print("transfer_end", transfer_end)
+                            # print("bgr_string:", bgr_string)
+                            # print("="*20)
+                            # exit()
+                        else:
+                            tmp_path = final_path[0][::-1]
+                            final_path = [tmp_path]
+                else:
+                    tmp_path = final_path[0][::-1]
+                    final_path = [tmp_path]
+
 
             ################################################################################################
             
@@ -178,7 +212,20 @@ for white in all_whites_pos:
                         count += 1
             
             all_path_list.append(final_path[0])
+
             build_graph(final_path[0])
+
+            try:
+                nx.shortest_path(G,  start,  end)
+            except:
+                print("="*20)
+                print("Action", action)
+                print("start = ", start)
+                print("end = ", end)
+                print("transfer_end", transfer_end)
+                print("bgr_string:", bgr_string)
+                print("="*20)
+                exit()
            
             draw_img = draw_waypoint(draw_map, start, end, final_path[0])
             rdp_img, _ = rdp_algorithm(draw_img, final_path[0])
@@ -189,16 +236,16 @@ for white in all_whites_pos:
             # print(count, "/", length)
 
             if len(final_path[0]) > 30:
-                cv2.imwrite(f"./tmp_res/Town{Town}_route_{start}_{transfer_end}.png", draw_map)
+                cv2.imwrite(f"./tmp_result/Town{Town}_route_{start}_{transfer_end}.png", draw_map)
                 print(count, "/", length)
     else:
         # print("instance key not found!!")
         pass
     
 
-nx.write_adjlist(G,f'{Town}_graph_v0.adjlist')
+nx.write_adjlist(G,f'new_{Town}_graph_v0.adjlist')
 
-fp1 = f"{Town}_not_found.txt"
+fp1 = f"new_{Town}_not_found.txt"
 with open(fp1, 'w') as f:
     for item in not_found_list:
         f.write(str(item) + '\n')
