@@ -35,25 +35,25 @@ def add_path(G, path, store_file_name):
             G.add_edge(path[0][i], path[0][i+1])
             
 
-    for idx in [0, 1, 2]:
-        print(idx)
+    # for idx in [0, 1, 2]:
+    #     print(idx)
 
-        new_path = [path[0][0]]
+    #     new_path = [path[0][0]]
 
-        for i in range(1, len(path[0])-1):
-            if i%3 == idx:
-                new_path.append(path[0][i])
+    #     for i in range(1, len(path[0])-1):
+    #         if i%3 == idx:
+    #             new_path.append(path[0][i])
 
-        new_path.append(path[0][-1])
-        path = new_path.copy()
-        path = [path]
+    #     new_path.append(path[0][-1])
+    #     path = new_path.copy()
+    #     path = [path]
 
-        for i in range(len(path[0])-1):
-            try:
-                G[path[0][i]][path[0][i+1]]
-            except:
-                print("Add")
-            G.add_edge(path[0][i], path[0][i+1])
+    #     for i in range(len(path[0])-1):
+    #         try:
+    #             G[path[0][i]][path[0][i+1]]
+    #         except:
+    #             print("Add")
+    #         G.add_edge(path[0][i], path[0][i+1])
 
 
     nx.write_adjlist(G, store_file_name)

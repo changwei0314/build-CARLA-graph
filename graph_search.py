@@ -91,7 +91,7 @@ if __name__ == '__main__':
     #################################### Read File #############################################
 
     # Town = args.town
-    Town = input("Enter town number: 1, 2, 3, or 10\n")
+    Town = int(input("Enter town number: 1, 2, 3, or 10\n"))
 
     if Town == 10:
         waypoint_map = cv2.imread("./waypoint_maps/Town10HD.png", 1)
@@ -132,14 +132,18 @@ if __name__ == '__main__':
 
     list_of_files = glob.glob(f'graph_list/{town_name}/*') # * means all if need specific format then *.csv
     latest_file = max(list_of_files, key=os.path.getctime)
-    file_name = latest_file[18:]
 
-    index = int(latest_file[27:-8])
-    new_file_name = latest_file[:27] + str(index+1) + latest_file[-8:]
+    if Town == 10:
+        index = int(latest_file[30:-8])
+        new_file_name = latest_file[:30] + str(index+1) + latest_file[-8:]
+    else:
+        index = int(latest_file[27:-8])
+        new_file_name = latest_file[:27] + str(index+1) + latest_file[-8:]
 
     print(latest_file)
+    _ = input("Keep going?\n")
+
     G = read_adjlist_with_tuples(latest_file)
-    
 
     count = 0
     lane_change = []
@@ -170,7 +174,7 @@ if __name__ == '__main__':
 
                 if action == "Right Lane Change" or action == "Left Lane Change":
                     lane_change.append([start, new_end, action])
-                    print(f'# {len(lane_change)} lane change')
+                    # print(f'# {len(lane_change)} lane change')
                     continue
 
                 # start, new_end = (1656, 444), (1452, 446)
