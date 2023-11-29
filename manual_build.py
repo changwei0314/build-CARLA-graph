@@ -109,13 +109,16 @@ else:
 
 list_of_files = glob.glob(f'graph_list/{town_name}/*') # * means all if need specific format then *.csv
 latest_file = max(list_of_files, key=os.path.getctime)
-file_name = latest_file[18:]
-print(latest_file)
 
-index = int(latest_file[27:-8])
-new_file_name = latest_file[:27] + str(index+1) + latest_file[-8:]
+if town == 10:
+    index = int(latest_file[30:-8])
+    new_file_name = latest_file[:30] + str(index+1) + latest_file[-8:]
+else:
+    index = int(latest_file[27:-8])
+    new_file_name = latest_file[:27] + str(index+1) + latest_file[-8:]
 
 G = read_adjlist_with_tuples(latest_file)
+print(latest_file)
 
 # Load an image
 original_img = waypoint_map.copy()
