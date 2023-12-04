@@ -193,7 +193,7 @@ if __name__ == '__main__':
                 draw_img = draw_waypoint(draw_map, start, new_end, path)
                 rdp_img, _ = rdp_algorithm(draw_img, path)
 
-                if count % 10 == 5:
+                if count % 10 == 0:
                     cv2.imwrite(f"./tmp_result/{town_name}/{count}_{start}_{new_end}.png", rdp_img)
 
 

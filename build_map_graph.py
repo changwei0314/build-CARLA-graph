@@ -154,27 +154,27 @@ for white in all_whites_pos:
                 continue
 
             ##### First attempt to find path #####
-            final_path = new_find_path(start, transfer_end, all_whites_pos, action, False)
+            final_path = new_find_path(transfer_end, start, all_whites_pos, action, False)
             if len(final_path) == 0:
                 
                 ##### Second attempt to find path #####
                 # Reverse search
-                print("============= Second Attempt (reverse try) =============")
-                final_path = new_find_path(transfer_end, start, all_whites_pos, action, False)
+                print("============= Second Attempt (normal try) =============")
+                final_path = new_find_path(start, transfer_end, all_whites_pos, action, False)
 
                 if len(final_path) == 0:
                     ##### Third attempt to find path #####
                     # Global search
-                    print("============= Third Attempt (original start-end try) =============")
+                    print("============= Third Attempt (original start-end reverse try) =============")
                     global_search = True
-                    final_path = new_find_path(start, end, all_whites_pos, action, global_search)
+                    final_path = new_find_path(end, start, all_whites_pos, action, global_search)
 
                     if len(final_path) == 0:
                         ##### Fourth attempt to find path #####
                         # Global Reverse search
-                        print("============= Fourth Attempt (original start-end reverse try) =============")
+                        print("============= Fourth Attempt (original start-end try) =============")
                         global_search = True
-                        final_path = new_find_path(end, start, all_whites_pos, action, global_search)
+                        final_path = new_find_path(start, end, all_whites_pos, action, global_search)
                         
                         if len(final_path) == 0:
                             not_found_list.append([start, end, action, bgr_string])
@@ -190,12 +190,13 @@ for white in all_whites_pos:
                             # print("bgr_string:", bgr_string)
                             # print("="*20)
                             # exit()
-                        else:
-                            tmp_path = final_path[0][::-1]
-                            final_path = [tmp_path]
-                else:
-                    tmp_path = final_path[0][::-1]
-                    final_path = [tmp_path]
+                    else:
+                        tmp_path = final_path[0][::-1]
+                        final_path = [tmp_path]
+
+            else:
+                tmp_path = final_path[0][::-1]
+                final_path = [tmp_path]
 
 
             ################################################################################################

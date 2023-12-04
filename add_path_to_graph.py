@@ -39,7 +39,7 @@ def add_path(G, path, store_file_name):
     new_path = [path[0][0]]
 
     for i in range(1, len(path[0])-1):
-        if i%3 == 1 or i%3 == 2:
+        if i%4 == 1 or i%4 == 2:
             new_path.append(path[0][i])
 
     new_path.append(path[0][-1])

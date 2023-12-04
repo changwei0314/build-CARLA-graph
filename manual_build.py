@@ -142,13 +142,13 @@ while True:
 
     if not freeze_image:
         if key == ord('w'):
-            shift_y -= 10
+            shift_y -= 70
         elif key == ord('s'):
             shift_y += 70
         elif key == ord('d'):
             shift_x += 70
         elif key == ord('a'):
-            shift_x -= 10
+            shift_x -= 70
 
         img = zoom_image(original_img, zoom_scale, shift_x, shift_y)
 
