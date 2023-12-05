@@ -169,7 +169,9 @@ if __name__ == '__main__':
                 start = (white[0], white[1])
                 end = (goal_pos[1], goal_pos[0])
 
-                print(start, end)
+                new_end = find_closest_end_waypoint(end, all_whites_pos)
+
+                print(start, new_end)
                 continue
             
 
