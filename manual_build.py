@@ -90,7 +90,7 @@ import glob
 # file_name = f"10_graph_v{count}.adjlist"
 # G = read_adjlist_with_tuples(f"./graph_list/{file_name}")
 
-town = int(input("Enter town number: 1, 2, 3, or 10:\n"))
+town = int(input("Enter town number: 1, 2, 3, 7, or 10:\n"))
 
 print("#"*50)
 print("\nScroll mouse to zoom in our zoom out")

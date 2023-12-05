@@ -9,7 +9,7 @@ from route_generator import iter_all_white_points, new_find_path, draw_waypoint,
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--town', default=10, choices=[1, 2, 3, 5, 10], type=int)
+parser.add_argument('--town', default=10, choices=[1, 2, 3, 5, 7, 10], type=int)
 args = parser.parse_args()
 
 #################################### Read File #############################################

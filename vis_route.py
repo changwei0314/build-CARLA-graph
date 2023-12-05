@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-Town = 5
+Town = 7
 town_name = None
 # 1, 4, 10
 
@@ -20,7 +20,7 @@ for i, j in path[:]:
     waypoint_map[i][j] = np.array([255, 255, 0])
 
 
-start, end = (4508, 3712), (4586, 3588)
+start, end = (3635, 2596), (3649, 3164)
 
 cv2.circle(waypoint_map, start[::-1], radius=5, color=(255, 0, 0), thickness=5)
 cv2.circle(waypoint_map, end[::-1], radius=5, color=(0, 255, 0), thickness=5)
