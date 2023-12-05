@@ -155,6 +155,7 @@ if __name__ == '__main__':
 
         draw_map = waypoint_map.copy()
         bgr_color = instance_map[white[0]][white[1]]
+        bgr_color = instance_map[2622][853]
         bgr_string = f'{bgr_color[0]}_{bgr_color[1]}_{bgr_color[2]}'
 
         if bgr_string in goal_data.keys():
@@ -167,6 +168,10 @@ if __name__ == '__main__':
                 ###################### search path #########################
                 start = (white[0], white[1])
                 end = (goal_pos[1], goal_pos[0])
+
+                print(start, end)
+                continue
+            
 
                 new_end = find_closest_end_waypoint(end, all_whites_pos)
 
@@ -193,7 +198,7 @@ if __name__ == '__main__':
 
                 if count % 10 == 0:
                     cv2.imwrite(f"./tmp_result/{town_name}/{count}_{start}_{new_end}.png", rdp_img)
-
+            exit()
 
         print(f"{count} / {len(all_whites_pos)}")
         count += 1
