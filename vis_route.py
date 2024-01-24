@@ -20,7 +20,7 @@ else:
 #     waypoint_map[i][j] = np.array([255, 255, 0])
 
 
-start, end = (621, 2364), (604, 1679)
+start, end = (3283, 4034),(3273, 4451)
 
 cv2.circle(waypoint_map, start[::-1], radius=5, color=(255, 0, 0), thickness=5)
 cv2.circle(waypoint_map, end[::-1], radius=5, color=(0, 255, 0), thickness=5)
